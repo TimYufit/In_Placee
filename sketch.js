@@ -279,6 +279,11 @@ function mouseReleased() {
   clicked = false;
 }
 
+function mouseClicked(){
+  clicked = true;
+  logDebug("✅ mouse click default" );
+}
+
 function touchStarted() {
   clicked = true;
   logDebug("✅ touch press default" );
