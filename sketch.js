@@ -4,7 +4,7 @@ let spaceMono;
 let topOffset = 0; // amount of space to push the map down
 
 let debugLines = [];
-let DEBUG = true;
+let DEBUG = false;
 let mapX, mapY, drawWidth, drawHeight;
 
 let cnv;
