@@ -284,9 +284,30 @@ function mouseClicked(){
   logDebug("✅ mouse click default" );
 }
 
-function touchStarted() {
+var src = document.body
+var clientX, clientY;
+
+src.addEventListener('touchstart', function(e) {
+  // Cache the client X/Y coordinates
+  clientX = e.touches[0].clientX;
+  clientY = e.touches[0].clientY;
   clicked = true;
-  logDebug("✅ touch press default" );
+  console.log("touch button 1!");
+console.log(clientX, clientY);}, false);
+
+
+/* prevents the mobile browser from processing some default
+ * touch events, like swiping left for "back" or scrolling
+ * the page.
+ */
+function touchStarted(){
+  clicked=true;
+  console.log("touch button 2!");
+  return false;
+}
+
+function touchMoved(){
+  return false;
 }
 
 
