@@ -4,7 +4,7 @@ let spaceMono;
 let topOffset = 0; // amount of space to push the map down
 
 let debugLines = [];
-let DEBUG = false;
+let DEBUG = true;
 let mapX, mapY, drawWidth, drawHeight;
 
 let cnv;
@@ -265,14 +265,17 @@ logDebug(
 
 function mousePressed() {
   handlePress(mouseX, mouseY, "mouse");
+  logDebug("✅ mouse press default" );
 }
 
 function touchStarted() {
   // use touches[0] if available (more reliable than mouseX/mouseY on mobile)
   if (touches && touches.length > 0) {
     handlePress(touches[0].x, touches[0].y, "touch");
+    logDebug("✅ touch press" );
   } else {
     handlePress(mouseX, mouseY, "touch-fallback");
+    logDebug("✅ mouse press" );
   }
   return false; // prevents scroll/zoom
 }
