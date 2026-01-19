@@ -149,7 +149,7 @@ function draw() {
 
     if (s.isHovered) hovered = true;
     
-    if(s.isHovered && mouseIsPressed){
+    if(s.isHovered && clicked){
 
       window.open(s.link, "_blank");
       clicked = false;
