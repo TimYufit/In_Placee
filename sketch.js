@@ -158,7 +158,7 @@ function draw() {
     image(imgToShow, stampX, stampY, stampW, stampH);
 
     if (s.isHovered) hovered = true;
-    if(s.isHovered && (clicked || isMobileDevice){
+    if(s.isHovered && (clicked || isMobileDevice)){
 
       window.open(s.link, "_blank");
       clicked = false;
@@ -291,11 +291,6 @@ function mousePressed() {
 function mouseReleased() {
   console.log("Mouse button released!");
   clicked = false;
-}
-
-function mouseClicked(){
-  clicked = true;
-  logDebug("✅ mouse click default" );
 }
 
 
