@@ -129,8 +129,8 @@ function draw() {
   /* Using test() method to search regexp in details
   it returns boolean value*/
   let isMobileDevice = regexp.test(details);
-  logDebug(details);
-  logDebug(isMobileDevice);
+  console.log(details);
+  console.log(isMobileDevice);
 
   mapX = width / 2;
   mapY = height / 2 + topOffset;
@@ -148,7 +148,7 @@ function draw() {
 
     // Hover detection
     s.isHovered = dist(mouseX, mouseY, stampX, stampY) < stampW / 2;
-    
+
 
     // ✅ REVERSED BEHAVIOR:
     // Default: color
@@ -159,7 +159,7 @@ function draw() {
 
     if (s.isHovered) hovered = true;
     if(s.isHovered && (clicked || isMobileDevice){
-      
+
       window.open(s.link, "_blank");
       clicked = false;
     }
@@ -214,8 +214,8 @@ function draw() {
       text(debugLines[i], 20, 20 + i * lineHeight);
     }
   }
-  
-  
+
+
 }
 
 function getCanvasPointer(px, py) {
@@ -250,7 +250,7 @@ let p = getCanvasPointer(px, py);
 
   mapX = width / 2;
   mapY = height / 2 + topOffset;
-  
+
   let hitIndex = -1;
 
   for (let i = 0; i < stamps.length; i++) {
@@ -261,7 +261,7 @@ let p = getCanvasPointer(px, py);
 
     let stampW = drawWidth * s.sizePercent;
     let hitRadius = stampW * 0.7; // bigger tap target for mobile
-    
+
 logDebug(
   "stamp " + i +
   " | X: " + stampX.toFixed(1) +
@@ -293,8 +293,12 @@ function mouseReleased() {
   clicked = false;
 }
 
+function mouseClicked(){
+  clicked = true;
+  logDebug("✅ mouse click default" );
+}
 
-  
+
 
 
 function windowResized() {
