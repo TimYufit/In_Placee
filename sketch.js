@@ -119,18 +119,8 @@ function draw() {
     drawHeight = width / mapAspect;
   }
 
-  let details = navigator.userAgent;
-
-  /* Creating a regular expression 
-  containing some mobile devices keywords 
-  to search it in details string*/
-  let regexp = /android|iphone|kindle|ipad/i;
-
-  /* Using test() method to search regexp in details
-  it returns boolean value*/
-  let isMobileDevice = regexp.test(details);
-  console.log(details);
-  console.log(isMobileDevice);
+  
+  
 
   mapX = width / 2;
   mapY = height / 2 + topOffset;
@@ -158,7 +148,8 @@ function draw() {
     image(imgToShow, stampX, stampY, stampW, stampH);
 
     if (s.isHovered) hovered = true;
-    if(s.isHovered && (clicked || isMobileDevice)){
+    
+    if(s.isHovered && mouseIsPressed){
 
       window.open(s.link, "_blank");
       clicked = false;
