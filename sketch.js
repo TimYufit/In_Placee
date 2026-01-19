@@ -150,7 +150,7 @@ function draw() {
     if (s.isHovered) hovered = true;
     
     if(s.isHovered && clicked){
-
+    logDebug("click link");
       window.open(s.link, "_blank");
       clicked = false;
     }
