@@ -148,12 +148,6 @@ function draw() {
     image(imgToShow, stampX, stampY, stampW, stampH);
 
     if (s.isHovered) hovered = true;
-    
-    if(s.isHovered && clicked){
-    logDebug("click link");
-      window.open(s.link, "_blank");
-      clicked = false;
-    }
 
   }
 
@@ -221,13 +215,11 @@ function getCanvasPointer(px, py) {
   };
 }
 
-function handlePress(px, py, source = "unknown") {
-let p = getCanvasPointer(px, py);
-  px = p.x;
-  py = p.y;
-  logDebug(source + " press @ " + px.toFixed(1) + ", " + py.toFixed(1));
-
-    let mapAspect = mapImg.width / mapImg.height;
+function handlePress() {
+let mapX = width / 2;
+  let mapY = height / 2 + topOffset;
+  // --- Draw map ---
+  let mapAspect = mapImg.width / mapImg.height;
   let canvasAspect = width / height;
   let drawWidth, drawHeight;
 
@@ -239,52 +231,49 @@ let p = getCanvasPointer(px, py);
     drawHeight = width / mapAspect;
   }
 
+  
+  
+
   mapX = width / 2;
   mapY = height / 2 + topOffset;
 
-  let hitIndex = -1;
+  image(mapImg, mapX, mapY, drawWidth, drawHeight);
 
-  for (let i = 0; i < stamps.length; i++) {
-    let s = stamps[i];
+  let hovered = false;
 
+  // --- Draw each stamp ---
+  for (let s of stamps) {
     let stampX = mapX - drawWidth / 2 + drawWidth * s.xPercent;
     let stampY = mapY - drawHeight / 2 + drawHeight * s.yPercent;
-
     let stampW = drawWidth * s.sizePercent;
-    let hitRadius = stampW * 0.7; // bigger tap target for mobile
+    let stampH = (s.colorImg.height / s.colorImg.width) * stampW;
 
-logDebug(
-  "stamp " + i +
-  " | X: " + stampX.toFixed(1) +
-  " | Y: " + stampY.toFixed(1) +
-  " | mapX: " + mapX +
-  " | mapY: " + mapY +
-  " | drawW: " + drawWidth +
-  " | drawH: " + drawHeight
-);
-    if (dist(px, py, stampX, stampY) < hitRadius) {
-      hitIndex = i;
-      logDebug("✅ HIT stamp " + i);
+    // Hover detection
+    s.isHovered = dist(mouseX, mouseY, stampX, stampY) < stampW / 2;
+
+
+    // ✅ REVERSED BEHAVIOR:
+    // Default: color
+    // Hover: black & white
+    let imgToShow = s.isHovered ? s.bwImg : s.colorImg;
+
+    image(imgToShow, stampX, stampY, stampW, stampH);
+
+    if (s.isHovered) hovered = true;
+    
+    if(s.isHovered){
+    logDebug("click link");
       window.open(s.link, "_blank");
-      break;
+      clicked = false;
     }
-  }
 
-  if (hitIndex === -1) logDebug("❌ NO HIT");
 }
 
 function mousePressed() {
   //handlePress(mouseX, mouseY, "mouse");
-  clicked = true;
+  handlePress();
   logDebug("✅ mouse press default" );
 }
-
-function mouseReleased() {
-  console.log("Mouse button released!");
-  clicked = false;
-}
-
-
 
 
 function windowResized() {
