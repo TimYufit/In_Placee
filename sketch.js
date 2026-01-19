@@ -293,10 +293,6 @@ function mouseReleased() {
   clicked = false;
 }
 
-function mouseClicked(){
-  clicked = true;
-  logDebug("✅ mouse click default" );
-}
 
   
 
