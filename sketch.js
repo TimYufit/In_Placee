@@ -119,8 +119,7 @@ function draw() {
     drawHeight = width / mapAspect;
   }
 
-  
-  
+
 
   mapX = width / 2;
   mapY = height / 2 + topOffset;
@@ -216,7 +215,7 @@ function getCanvasPointer(px, py) {
 }
 
 function handlePress() {
-let mapX = width / 2;
+  let mapX = width / 2;
   let mapY = height / 2 + topOffset;
   // --- Draw map ---
   let mapAspect = mapImg.width / mapImg.height;
@@ -231,8 +230,7 @@ let mapX = width / 2;
     drawHeight = width / mapAspect;
   }
 
-  
-  
+
 
   mapX = width / 2;
   mapY = height / 2 + topOffset;
@@ -262,12 +260,13 @@ let mapX = width / 2;
     if (s.isHovered) hovered = true;
     
     if(s.isHovered){
-    logDebug("click link");
+      logDebug("click link");
       window.open(s.link, "_blank");
       clicked = false;
     }
 
-}
+  }
+} // <-- ADDED: close handlePress function (was missing)
 
 function mousePressed() {
   //handlePress(mouseX, mouseY, "mouse");
