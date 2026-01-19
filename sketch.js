@@ -129,8 +129,8 @@ function draw() {
   /* Using test() method to search regexp in details
   it returns boolean value*/
   let isMobileDevice = regexp.test(details);
-  console.log(details);
-  console.log(isMobileDevice);
+  logDebug(details);
+  logDebug(isMobileDevice);
 
   mapX = width / 2;
   mapY = height / 2 + topOffset;
