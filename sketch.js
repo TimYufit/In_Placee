@@ -119,6 +119,17 @@ function draw() {
     drawHeight = width / mapAspect;
   }
 
+  let details = navigator.userAgent;
+
+  /* Creating a regular expression 
+  containing some mobile devices keywords 
+  to search it in details string*/
+  let regexp = /android|iphone|kindle|ipad/i;
+
+  /* Using test() method to search regexp in details
+  it returns boolean value*/
+  let isMobileDevice = regexp.test(details);
+
   mapX = width / 2;
   mapY = height / 2 + topOffset;
 
@@ -145,7 +156,8 @@ function draw() {
     image(imgToShow, stampX, stampY, stampW, stampH);
 
     if (s.isHovered) hovered = true;
-    if(s.isHovered && clicked){
+    if(s.isHovered && (clicked || isMobileDevice){
+      
       window.open(s.link, "_blank");
       clicked = false;
     }
@@ -284,31 +296,7 @@ function mouseClicked(){
   logDebug("✅ mouse click default" );
 }
 
-var src = document.body
-var clientX, clientY;
-
-src.addEventListener('touchstart', function(e) {
-  // Cache the client X/Y coordinates
-  clientX = e.touches[0].clientX;
-  clientY = e.touches[0].clientY;
-  clicked = true;
-  console.log("touch button 1!");
-console.log(clientX, clientY);}, false);
-
-
-/* prevents the mobile browser from processing some default
- * touch events, like swiping left for "back" or scrolling
- * the page.
- */
-function touchStarted(){
-  clicked=true;
-  console.log("touch button 2!");
-  return false;
-}
-
-function touchMoved(){
-  return false;
-}
+  
 
 
 function windowResized() {
