@@ -261,7 +261,11 @@ function handlePress() {
     
     if(s.isHovered){
       logDebug("click link");
-      window.open(s.link, "_blank");
+      // Try opening in a new tab; if blocked, navigate in the same tab
+      let newWin = window.open(s.link, "_blank");
+      if (!newWin) {
+        window.location.href = s.link;
+      }
       clicked = false;
     }
 
@@ -274,6 +278,36 @@ function mousePressed() {
   logDebug("✅ mouse press default" );
 }
 
+// --- Add touch support for mobile Safari ---
+function touchStarted(e) {
+  // Use the first touch point
+  let clientX = null;
+  let clientY = null;
+
+  if (touches && touches.length > 0) {
+    // p5 'touches' may have x/y relative to the canvas; to be safe, use client coords if available
+    clientX = touches[0].clientX !== undefined ? touches[0].clientX : touches[0].x;
+    clientY = touches[0].clientY !== undefined ? touches[0].clientY : touches[0].y;
+  } else if (e && e.changedTouches && e.changedTouches.length > 0) {
+    clientX = e.changedTouches[0].clientX;
+    clientY = e.changedTouches[0].clientY;
+  } else if (e && e.clientX !== undefined) {
+    clientX = e.clientX;
+    clientY = e.clientY;
+  }
+
+  if (clientX !== null && clientY !== null) {
+    let p = getCanvasPointer(clientX, clientY);
+    // update p5's mouse coordinates so existing logic that uses mouseX/mouseY works
+    mouseX = p.x;
+    mouseY = p.y;
+  }
+
+  handlePress();
+  logDebug("✅ touch start");
+  // preventDefault so Safari doesn't also interpret it as a passive scroll or similar
+  return false;
+}
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
