@@ -279,6 +279,11 @@ function mouseReleased() {
   clicked = false;
 }
 
+function touchStarted() {
+  clicked = true;
+  logDebug("✅ touch press default" );
+}
+
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
