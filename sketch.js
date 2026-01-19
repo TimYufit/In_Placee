@@ -8,6 +8,7 @@ let DEBUG = true;
 let mapX, mapY, drawWidth, drawHeight;
 
 let cnv;
+let clicked = false;
 
 function logDebug(msg) {
   if (!DEBUG) return;
@@ -144,6 +145,10 @@ function draw() {
     image(imgToShow, stampX, stampY, stampW, stampH);
 
     if (s.isHovered) hovered = true;
+    if(s.isHovered && clicked){
+      window.open(s.link, "_blank");
+      clicked = false;
+    }
 
   }
 
@@ -264,21 +269,16 @@ logDebug(
 }
 
 function mousePressed() {
-  handlePress(mouseX, mouseY, "mouse");
+  //handlePress(mouseX, mouseY, "mouse");
+  clicked = true;
   logDebug("✅ mouse press default" );
 }
 
-function touchStarted() {
-  // use touches[0] if available (more reliable than mouseX/mouseY on mobile)
-  if (touches && touches.length > 0) {
-    handlePress(touches[0].x, touches[0].y, "touch");
-    logDebug("✅ touch press" );
-  } else {
-    handlePress(mouseX, mouseY, "touch-fallback");
-    logDebug("✅ mouse press" );
-  }
-  return false; // prevents scroll/zoom
+function mouseReleased() {
+  console.log("Mouse button released!");
+  clicked = false;
 }
+
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
