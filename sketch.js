@@ -10,6 +10,9 @@ let mapX, mapY, drawWidth, drawHeight;
 let cnv;
 let clicked = false;
 
+// Prevent multiple rapid navigations from repeated taps/clicks
+let clickLock = false;
+
 function logDebug(msg) {
   if (!DEBUG) return;
   debugLines.unshift(msg);
@@ -212,7 +215,7 @@ function getCanvasPointer(px, py) {
   };
 }
 
-// Simplified handlePress: only detect clicks and open links — DO NOT redraw the canvas here.
+// Revised handlePress: detect stamp press and perform a TOP-LEVEL navigation
 function handlePress() {
   // Compute map draw dimensions (same logic as in draw)
   let mapAspect = mapImg.width / mapImg.height;
@@ -237,12 +240,38 @@ function handlePress() {
     let stampW = dWidth * s.sizePercent;
 
     if (dist(mouseX, mouseY, stampX, stampY) < stampW / 2) {
-      logDebug("click link");
-      // Try opening in a new tab; if blocked, navigate in the same tab
-      let newWin = window.open(s.link, "_blank");
-      if (!newWin) {
-        window.location.href = s.link;
+      logDebug("click link: " + s.link);
+
+      // prevent rapid repeated taps from causing multiple navigations
+      if (clickLock) return;
+      clickLock = true;
+      setTimeout(() => { clickLock = false; }, 800);
+
+      // Try to force a top-level navigation so Cargo's client router does not
+      // inject content into the current page (prevents appended column-sets).
+      try {
+        // If running inside an iframe (Cargo page embeds the sketch), navigate the top context.
+        if (window !== top) {
+          top.location.href = s.link;
+        } else {
+          // Not in an iframe: attempt to open in a new tab first; fallback to same-tab navigation.
+          const newWin = window.open(s.link, "_blank");
+          if (!newWin) {
+            window.location.href = s.link;
+          }
+        }
+      } catch (err) {
+        // Some environments block direct top access; use an anchor click fallback forcing top.
+        console.warn("top navigation failed, falling back to anchor click:", err);
+        const a = document.createElement('a');
+        a.href = s.link;
+        a.target = '_top';
+        a.rel = 'noopener noreferrer';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
       }
+
       // Stop after first matching stamp
       return;
     }
