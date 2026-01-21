@@ -120,7 +120,6 @@ function draw() {
   }
 
 
-
   mapX = width / 2;
   mapY = height / 2 + topOffset;
 
@@ -199,7 +198,6 @@ function draw() {
     }
   }
 
-
 }
 
 function getCanvasPointer(px, py) {
@@ -214,66 +212,44 @@ function getCanvasPointer(px, py) {
   };
 }
 
+// Simplified handlePress: only detect clicks and open links — DO NOT redraw the canvas here.
 function handlePress() {
-  let mapX = width / 2;
-  let mapY = height / 2 + topOffset;
-  // --- Draw map ---
+  // Compute map draw dimensions (same logic as in draw)
   let mapAspect = mapImg.width / mapImg.height;
   let canvasAspect = width / height;
-  let drawWidth, drawHeight;
+  let dWidth, dHeight;
 
   if (canvasAspect > mapAspect) {
-    drawHeight = height;
-    drawWidth = mapAspect * height;
+    dHeight = height;
+    dWidth = mapAspect * height;
   } else {
-    drawWidth = width;
-    drawHeight = width / mapAspect;
+    dWidth = width;
+    dHeight = width / mapAspect;
   }
 
+  let mapCenterX = width / 2;
+  let mapCenterY = height / 2 + topOffset;
 
-
-  mapX = width / 2;
-  mapY = height / 2 + topOffset;
-
-  image(mapImg, mapX, mapY, drawWidth, drawHeight);
-
-  let hovered = false;
-
-  // --- Draw each stamp ---
+  // Check each stamp for a click without drawing anything
   for (let s of stamps) {
-    let stampX = mapX - drawWidth / 2 + drawWidth * s.xPercent;
-    let stampY = mapY - drawHeight / 2 + drawHeight * s.yPercent;
-    let stampW = drawWidth * s.sizePercent;
-    let stampH = (s.colorImg.height / s.colorImg.width) * stampW;
+    let stampX = mapCenterX - dWidth / 2 + dWidth * s.xPercent;
+    let stampY = mapCenterY - dHeight / 2 + dHeight * s.yPercent;
+    let stampW = dWidth * s.sizePercent;
 
-    // Hover detection
-    s.isHovered = dist(mouseX, mouseY, stampX, stampY) < stampW / 2;
-
-
-    // ✅ REVERSED BEHAVIOR:
-    // Default: color
-    // Hover: black & white
-    let imgToShow = s.isHovered ? s.bwImg : s.colorImg;
-
-    image(imgToShow, stampX, stampY, stampW, stampH);
-
-    if (s.isHovered) hovered = true;
-    
-    if(s.isHovered){
+    if (dist(mouseX, mouseY, stampX, stampY) < stampW / 2) {
       logDebug("click link");
       // Try opening in a new tab; if blocked, navigate in the same tab
       let newWin = window.open(s.link, "_blank");
       if (!newWin) {
         window.location.href = s.link;
       }
-      clicked = false;
+      // Stop after first matching stamp
+      return;
     }
-
   }
-} // <-- ADDED: close handlePress function (was missing)
+}
 
 function mousePressed() {
-  //handlePress(mouseX, mouseY, "mouse");
   handlePress();
   logDebug("✅ mouse press default" );
 }
